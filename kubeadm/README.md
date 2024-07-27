@@ -211,3 +211,8 @@ OR
 > WORKER_IP:NODEPORT_SERVICE_PORT
 http://192.168.1.201:30894/
 ```
+# Visual of Kubernetes
+
+<img src="images/node.png" alt="images/node.png"/>
+<img src="images/overview.png" alt="images/overview.png"/>
+<img src="images/pods.png" alt="images/pods.png"/>
