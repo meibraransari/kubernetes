@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:16:34+05:30
+updated: 2024-07-27T12:19:31+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -77,21 +77,16 @@ sudo sysctl --system
 ## Install CRIO Runtime
 sudo apt-get update -y
 sudo apt-get install -y software-properties-common curl apt-transport-https ca-certificates gpg
-
 sudo curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/deb/ /" | sudo tee /etc/apt/sources.list.d/cri-o.list
-
 sudo apt-get update -y
 sudo apt-get install -y cri-o
-
 sudo systemctl daemon-reload
 sudo systemctl enable crio --now
 sudo systemctl start crio.service
-
-echo "CRI runtime installed successfully"
+sudo systemctl status crio.service
 
 # Install basic app
-sudo apt update -y
 sudo apt install iputils-ping net-tools nano vim telnet jq -y
 sudo apt install -y curl gnupg2 gpg software-properties-common apt-transport-https ca-certificates
 
