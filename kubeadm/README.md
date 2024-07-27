@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T09:58:40+05:30
+updated: 2024-07-27T10:00:31+05:30
 ---
 # Kubeadm Installation Guide
 
@@ -155,7 +155,7 @@ kubeadm token create --print-join-command
 
 ---
 
-## Verify Cluster Connection
+## Verify Kubernetes Cluster
 
 **On Master Node:**
 
