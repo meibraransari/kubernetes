@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:15:27+05:30
+updated: 2024-07-27T12:16:34+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -68,8 +68,8 @@ cat /etc/sysctl.d/k8s.conf
 
 # Enable IP Forwarding
 sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
-cat /proc/sys/net/ipv4/ip_forward
 sudo sysctl -p
+cat /proc/sys/net/ipv4/ip_forward
 
 # Apply sysctl params without reboot
 sudo sysctl --system
