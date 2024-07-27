@@ -1,3 +1,7 @@
+---
+created: 2024-07-27T00:47:23+05:30
+updated: 2024-07-27T09:58:40+05:30
+---
 # Kubeadm Installation Guide
 
 This guide outlines the steps needed to set up a Kubernetes cluster using kubeadm.
@@ -7,23 +11,39 @@ This guide outlines the steps needed to set up a Kubernetes cluster using kubead
 - Ubuntu OS (Xenial or later)
 - sudo privileges
 - Internet access
-- t2.medium instance type or higher
+- 2Core, 4GB or higher
+
+## Firewall Setup
+
+> Opening ports for Control Plane
+```
+sudo ufw allow 6443/tcp
+sudo ufw allow 2379:2380/tcp
+sudo ufw allow 10250/tcp
+sudo ufw allow 10259/tcp
+sudo ufw allow 10257/tcp
+```
+> Opening ports for Worker Nodes
+```
+sudo ufw allow 10250/tcp #Kubelet API
+sudo ufw allow 30000:32767/tcp #NodePort Services
+```
+>  Opening ports for Calico CNI
+```
+sudo ufw allow 179/tcp
+sudo ufw allow 4789/udp
+sudo ufw allow 4789/tcp
+sudo ufw allow 2379/tcp
+```
 
 ---
-
-## AWS Setup
-
-- Make sure your all instance are in same **Security group**.
-- Expose port **6443** in the **Security group**, so that worker nodes can join the cluster.
-
----
-
 ## Execute on Both "Master" & "Worker Node"
 
 Run the following commands on both the master and worker nodes to prepare them for kubeadm.
 
 ```bash
-# disable swap
+# First, disable the swap to make kubelet work properly
+sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 sudo swapoff -a
 
 # Create the .conf file to load the modules at bootup
@@ -32,6 +52,7 @@ overlay
 br_netfilter
 EOF
 
+# Configure required modules
 sudo modprobe overlay
 sudo modprobe br_netfilter
 
@@ -41,6 +62,12 @@ net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
+cat /etc/sysctl.d/kubernetes.conf
+
+# Enable IP Forwarding
+sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
+cat /proc/sys/net/ipv4/ip_forward
+sudo sysctl -p
 
 # Apply sysctl params without reboot
 sudo sysctl --system
@@ -61,17 +88,22 @@ sudo systemctl start crio.service
 
 echo "CRI runtime installed successfully"
 
+# Install basic app
+sudo apt update -y
+sudo apt install iputils-ping net-tools nano vim telnet jq -y
+sudo apt install -y curl gnupg2 gpg software-properties-common apt-transport-https ca-certificates
+
 # Add Kubernetes APT repository and install required packages
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 sudo apt-get update -y
 sudo apt-get install -y kubelet="1.29.0-*" kubectl="1.29.0-*" kubeadm="1.29.0-*"
-sudo apt-get update -y
-sudo apt-get install -y jq
-
+sudo apt-mark hold kubeadm kubelet kubectl
 sudo systemctl enable --now kubelet
 sudo systemctl start kubelet
+sudo systemctl status kubelet
+kubeadm version
 ```
 
 ---
@@ -79,23 +111,29 @@ sudo systemctl start kubelet
 ## Execute ONLY on "Master Node"
 
 ```bash
+# Pull Image
 sudo kubeadm config images pull
+sudo kubeadm config images list
 
+# Launch Kubernetes
 sudo kubeadm init
+
+# Load profile
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
 mkdir -p "$HOME"/.kube
 sudo cp -i /etc/kubernetes/admin.conf "$HOME"/.kube/config
 sudo chown "$(id -u)":"$(id -g)" "$HOME"/.kube/config
 
-
 # Network Plugin = calico
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/calico.yaml
 
 kubeadm token create --print-join-command
+
+- You will get `kubeadm token`, **Copy it**.
 ```
 
 - You will get `kubeadm token`, **Copy it**.
-  <img src="https://raw.githubusercontent.com/faizan35/kubernetes_cluster_with_kubeadm/main/Img/kubeadm-token.png" width="75%">
 
 ---
 
@@ -122,10 +160,10 @@ kubeadm token create --print-join-command
 **On Master Node:**
 
 ```bash
+kubectl cluster-info
 kubectl get nodes
+kubectl get nodes -o wide
 ```
-
-   <img src="https://raw.githubusercontent.com/faizan35/kubernetes_cluster_with_kubeadm/main/Img/nodes-connected.png" width="70%">
 
 ---
 
@@ -139,10 +177,25 @@ kubectl label node <node-name> node-role.kubernetes.io/worker=worker
 
 ---
 
-## Optional: Test a demo Pod
+## Optional: Test a Nginx Pod
 
-If you want to test a demo pod, you can use the following command:
+If you want to test a Nginx pod, you can use the following command:
 
 ```bash
-kubectl run hello-world-pod --image=busybox --restart=Never --command -- sh -c "echo 'Hello, World' && sleep 3600"
+# Create Nginx
+kubectl create deploy nginx-web-server --image nginx
+
+# Expose Nginx
+kubectl expose deploy nginx-web-server --port 80 --type NodePort
+```
+
+To view the nginx web server, execute the following over your preferred web browser:
+```
+> MASTER_IP:NODEPORT_SERVICE_PORT
+http://192.168.1.205:32141/
+
+OR
+
+# WORKER_IP:NODEPORT_SERVICE_PORT
+http://192.168.1.201:32141/
 ```
