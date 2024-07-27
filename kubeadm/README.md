@@ -1,11 +1,22 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:57:21+05:30
+updated: 2024-07-27T13:17:12+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
 
 This guide outlines the steps needed to set up a Kubernetes cluster using kubeadm.
+## My Cluster info
+
+```markdown
+|Name|IP|CPU|Memory|Storage|
+|---|---|---|---|---|
+|Master|192.168.1.205|2|4|30|
+|Node1|192.168.1.201|2|4|25|
+|Node2|192.168.1.202|2|4|25|
+|Node3|192.168.1.203|2|4|25|
+|Node3|192.168.1.204|2|4|25|
+```
 
 ## Pre-requisites
 
