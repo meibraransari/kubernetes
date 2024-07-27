@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:27:50+05:30
+updated: 2024-07-27T12:57:21+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -183,13 +183,20 @@ kubectl create deploy nginx-web-server --image nginx
 kubectl expose deploy nginx-web-server --port 80 --type NodePort
 ```
 
+Get Nginx information
+```
+kubectl get services
+kubectl get nodes -o wide
+http://<Master-IP>:<NodePort>
+or
+http://<Node-IP>:<NodePort>
+```
+
 To view the nginx web server, execute the following over your preferred web browser:
 ```
 > MASTER_IP:NODEPORT_SERVICE_PORT
-http://192.168.1.205:32141/
-
+http://192.168.1.205:30894/
 OR
-
-# WORKER_IP:NODEPORT_SERVICE_PORT
-http://192.168.1.201:32141/
+> WORKER_IP:NODEPORT_SERVICE_PORT
+http://192.168.1.201:30894/
 ```
