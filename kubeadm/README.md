@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:19:31+05:30
+updated: 2024-07-27T12:22:54+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -43,6 +43,9 @@ sudo ufw allow 2379/tcp
 Run the following commands on both the master and worker nodes to prepare them for kubeadm.
 
 ```bash
+# Install basic app
+sudo apt install -y iputils-ping net-tools nano vim telnet jq curl gnupg2 gpg software-properties-common apt-transport-https ca-certificates
+
 # First, disable the swap to make kubelet work properly
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 sudo swapoff -a
@@ -86,14 +89,9 @@ sudo systemctl enable crio --now
 sudo systemctl start crio.service
 sudo systemctl status crio.service
 
-# Install basic app
-sudo apt install iputils-ping net-tools nano vim telnet jq -y
-sudo apt install -y curl gnupg2 gpg software-properties-common apt-transport-https ca-certificates
-
 # Add Kubernetes APT repository and install required packages
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
 sudo apt-get update -y
 sudo apt-get install -y kubelet="1.29.0-*" kubectl="1.29.0-*" kubeadm="1.29.0-*"
 sudo apt-mark hold kubeadm kubelet kubectl
