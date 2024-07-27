@@ -1,6 +1,6 @@
 ---
 Created: 2024-07-27T00:47:23+05:30
-Updated: 2024-07-27T13:22:13+05:30
+Updated: 2024-07-27T16:24:37+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -216,3 +216,13 @@ http://192.168.1.201:30894/
 <img src="images/node.png" alt="images/node.png"/>
 <img src="images/overview.png" alt="images/overview.png"/>
 <img src="images/pods.png" alt="images/pods.png"/>
+
+
+### 💼 Connect with me 👇👇 😊
+
+- 🔥 [**Youtube**](https://www.youtube.com/@DevOpsinAction?sub_confirmation=1)
+- ✍ [**Blog**](https://ibraransari.blogspot.com/)
+- 💼 [**LinkedIn**](https://www.linkedin.com/in/ansariibrar/)
+- 👨‍💻 [**Github**](https://github.com/meibraransari?tab=repositories)
+- 💬 [**Telegram**](https://t.me/DevOpsinActionTelegram)
+- 🐳 [**Docker**](https://hub.docker.com/u/ibraransaridocker)
