@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:11:43+05:30
+updated: 2024-07-27T12:15:27+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -63,7 +63,8 @@ net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
-cat /etc/sysctl.d/kubernetes.conf
+
+cat /etc/sysctl.d/k8s.conf
 
 # Enable IP Forwarding
 sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
