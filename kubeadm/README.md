@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:25:16+05:30
+updated: 2024-07-27T12:27:50+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -44,6 +44,7 @@ Run the following commands on both the master and worker nodes to prepare them f
 
 ```bash
 # Install basic app
+sudo apt-get update -y
 sudo apt install -y iputils-ping net-tools nano vim telnet jq curl gnupg2 gpg software-properties-common apt-transport-https ca-certificates
 
 # First, disable the swap to make kubelet work properly
@@ -78,8 +79,6 @@ cat /proc/sys/net/ipv4/ip_forward
 sudo sysctl --system
 
 ## Install CRIO Runtime
-sudo apt-get update -y
-sudo apt-get install -y software-properties-common curl apt-transport-https ca-certificates gpg
 sudo curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/deb/ /" | sudo tee /etc/apt/sources.list.d/cri-o.list
 sudo apt-get update -y
