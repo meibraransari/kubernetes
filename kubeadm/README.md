@@ -16,7 +16,7 @@ This guide outlines the steps needed to set up a Kubernetes cluster using kubead
 |Node3|192.168.1.203|2|4|25|
 |Node3|192.168.1.204|2|4|25|
 
-<img src="images/Proxmox_k8s.png" alt="images/Proxmox_k8s.png" width="800"/>
+<img src="images/Proxmox_k8s.png" alt="images/Proxmox_k8s.png"/>
 
 ## Pre-requisites
 
