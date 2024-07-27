@@ -1,6 +1,6 @@
 ---
 created: 2024-07-27T00:47:23+05:30
-updated: 2024-07-27T12:22:54+05:30
+updated: 2024-07-27T12:25:16+05:30
 Maintainer: Ibrar Ansari
 ---
 # Kubeadm Installation Guide
@@ -16,7 +16,7 @@ This guide outlines the steps needed to set up a Kubernetes cluster using kubead
 
 ## Firewall Setup
 
-> Opening ports for Control Plane
+> Required ports for Control Plane
 ```
 sudo ufw allow 6443/tcp
 sudo ufw allow 2379:2380/tcp
@@ -24,12 +24,12 @@ sudo ufw allow 10250/tcp
 sudo ufw allow 10259/tcp
 sudo ufw allow 10257/tcp
 ```
-> Opening ports for Worker Nodes
+> Required ports for Worker Nodes
 ```
 sudo ufw allow 10250/tcp #Kubelet API
 sudo ufw allow 30000:32767/tcp #NodePort Services
 ```
->  Opening ports for Calico CNI
+>  Required ports for Calico CNI
 ```
 sudo ufw allow 179/tcp
 sudo ufw allow 4789/udp
@@ -47,7 +47,7 @@ Run the following commands on both the master and worker nodes to prepare them f
 sudo apt install -y iputils-ping net-tools nano vim telnet jq curl gnupg2 gpg software-properties-common apt-transport-https ca-certificates
 
 # First, disable the swap to make kubelet work properly
-sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sudo sed -i '/\bswap\b/s/^/#/' /etc/fstab
 sudo swapoff -a
 
 # Create the .conf file to load the modules at bootup
